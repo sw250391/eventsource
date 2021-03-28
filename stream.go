@@ -157,9 +157,13 @@ func (stream *Stream) receiveEvents(r io.ReadCloser) {
 			return
 		}
 		if err != nil {
-			stream.Errors <- err
+			fmt.Println("Stream read returned error %s", err)
 			return
 		}
+
+		fmt.Println("Id is ", ev.Id())
+		fmt.Println("Event is ", ev.Event())
+		fmt.Println("Data is ", ev.Data())
 
 		pub := ev.(*publication)
 		if pub.Retry() > 0 {
@@ -191,6 +195,5 @@ func (stream *Stream) retryRestartStream() {
 			return
 		}
 		stream.Errors <- err
-		backoff *= 2
 	}
 }
